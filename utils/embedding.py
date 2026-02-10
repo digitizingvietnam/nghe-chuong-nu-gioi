@@ -1,3 +1,14 @@
+"""
+embedding.py
+
+Utility module for creating embedding functions used across the project.
+
+This module is responsible for:
+- Loading environment variables
+- Initializing the OpenAI embedding model
+- Providing a reusable embedding function for vector databases
+"""
+
 from langchain_openai import OpenAIEmbeddings
 from dotenv import load_dotenv
 import os
