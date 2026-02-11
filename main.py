@@ -18,7 +18,7 @@ from flask import Flask, jsonify, request, render_template, session
 import pandas as pd
 import os
 
-from utils.rag import query_rag   # 👈 reuse utility
+from utils.rag import query_rag
 
 app = Flask(__name__)
 app.secret_key = '123456'

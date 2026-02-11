@@ -40,8 +40,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Configuration
-PINECONE_INDEX_NAME = "digitizing-vietnam"  # Shared index for all projects
-PROJECT_NAMESPACE = "nghe-chuong-nu-gioi"  # Unique namespace for this project
+PINECONE_INDEX_NAME = os.getenv("PROJECT_INDEX_NAME")
+PROJECT_NAMESPACE = os.getenv("PROJECT_NAMESPACE")
 DATA_PATH = "data"
 
 embedding_function = get_embedding_function()
@@ -116,15 +116,18 @@ def load_documents():
 
         file_path = os.path.join(DATA_PATH, file_name)
         try:
-            df = pd.read_csv(file_path, delimiter=';', on_bad_lines='skip')
+            # FIX: Change delimiter to ',' to match your CSV
+            df = pd.read_csv(file_path, delimiter=',', on_bad_lines='skip')
 
             for _, row in df.iterrows():
-                # Extract metadata from CSV columns
+                # FIX: Extract metadata using the actual column names from your CSV
                 metadata = {
-                    "book-title": row.get("Tên sách", row.get("Title", "")),
-                    "page-number": str(row.get("Trang", row.get("Page", ""))),
-                    "author": row.get("Tác giả", row.get("Author", "")),
-                    "chapter": row.get("Chương", row.get("Chapter", "")),
+                    "topic": row.get("Chủ đề", ""),
+                    "title": row.get("Bài viết", ""),
+                    "author": row.get("Tác giả", ""),
+                    "category": row.get("Chuyên mục", ""),
+                    "issue": str(row.get("Số báo", "")),
+                    "date": row.get("Ngày xuất bản", ""),
                     "source": file_name
                 }
 
@@ -132,15 +135,11 @@ def load_documents():
                 metadata = {k: (v if pd.notna(v) else "")
                             for k, v in metadata.items()}
 
-                # Get content from 'Nội dung' or the last column
-                if 'Nội dung' in df.columns:
-                    content = row.get('Nội dung', '')
-                else:
-                    content = row.iloc[-1]
-
+                # FIX: Target the 'Nội dung' column for the text content
+                content = row.get('Nội dung', '')
                 content = str(content) if pd.notna(content) else ""
 
-                if content.strip():  # Only add non-empty content
+                if content.strip(): 
                     document = Document(
                         page_content=content,
                         metadata=metadata
@@ -186,16 +185,18 @@ def upload_to_pinecone(index, chunks: list[Document], batch_size=100):
         # Prepare metadata
         metadata = {
             "text": chunk.page_content,
-            "book-title": chunk.metadata.get("book-title", ""),
-            "page-number": chunk.metadata.get("page-number", ""),
+            "topic": chunk.metadata.get("topic", ""),
+            "title": chunk.metadata.get("title", ""),
             "author": chunk.metadata.get("author", ""),
-            "chapter": chunk.metadata.get("chapter", ""),
+            "category": chunk.metadata.get("category", ""),
+            "issue": chunk.metadata.get("issue", ""),
+            "date": chunk.metadata.get("date", ""),
             "source": chunk.metadata.get("source", "")
         }
 
         vectors.append({
-            "id": vector_id,
-            "values": embedding,
+            "id": f"{PROJECT_NAMESPACE}-{i}",
+            "values": embedding_function.embed_query(chunk.page_content),
             "metadata": metadata
         })
 

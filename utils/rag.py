@@ -25,8 +25,8 @@ from langchain_chroma import Chroma
 load_dotenv()
 
 # Pinecone configuration
-PINECONE_INDEX_NAME = "digitizing-vietnam"
-PROJECT_NAMESPACE = "nghe-chuong-nu-gioi"
+PINECONE_INDEX_NAME = os.getenv("PROJECT_INDEX_NAME")
+PROJECT_NAMESPACE = os.getenv("PROJECT_NAMESPACE")
 
 PROMPT_TEMPLATE = """
 Trả lời theo ngôn ngữ giống thông tin dưới đây:
