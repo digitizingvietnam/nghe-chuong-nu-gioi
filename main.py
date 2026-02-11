@@ -15,7 +15,6 @@ between application logic and RAG implementation.
 """
 
 from flask import Flask, jsonify, request, render_template, session
-import pandas as pd
 import os
 
 from utils.rag import query_rag
@@ -59,20 +58,16 @@ def health_check():
 @app.route('/api/quotes', methods=['GET'])
 def get_quotes():
     try:
-        df = pd.read_csv('data/Nữ Giới Chung_Datasheet - Sheet1.csv')
-
-        if 'Nội dung' in df.columns:
-            contents = df['Nội dung'].dropna().tolist()
-        else:
-            contents = df.iloc[:, -1].dropna().tolist()
-
-        contents = [
-            c.replace("\\n", " ").replace("\n", " ").strip()
-            for c in contents
-        ]
-
+        contents = []
+        # Use built-in csv module instead of pandas
+        with open('data/Nữ Giới Chung_Datasheet - Sheet1.csv', mode='r', encoding='utf-8') as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                content = row.get('Nội dung', '')
+                if content:
+                    contents.append(content.replace("\\n", " ").replace("\n", " ").strip())
+        
         return jsonify(contents[:10])
-
     except Exception as e:
         print("Error reading CSV:", e)
         return jsonify([])

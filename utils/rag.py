@@ -20,7 +20,6 @@ from pinecone import Pinecone
 from utils.embedding import get_embedding_function
 from langchain_openai import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
-from langchain_chroma import Chroma
 
 load_dotenv()
 
