@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot NGC</title>
+    <title>Nghe Chuông Nữ Giới</title>
 
     <!-- Import EB Garamond (regular and italic) from Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;1,400&display=swap"
+        rel="stylesheet">
 
     <!-- Import Font Face for FZ SG ZT Voltra -->
     <style>
@@ -19,24 +21,28 @@
     <link rel="stylesheet" href="/static/style.css">
     <!-- <script src="/static/script.js" defer></script> -->
 </head>
+
 <body>
     <div class="container">
         <header>
             <h1 style="font-family: 'FZ-SG ZT Voltra', serif;">ĐỜN-BÀ</h1>
             <!-- create a p with the style EB Garamond regular, font  -->
-            <h4 style="font-family: 'EB Garamond', serif;">Bạn muốn nói chuyện với đờn-bà nước Nam về hôn nhân, cách nuôi con, sự học, sự nghiệp? Hãy gióng chuông nữ giới!</h4>
+            <h4 style="font-family: 'EB Garamond', serif;">Bạn muốn nói chuyện với đờn-bà nước Nam về hôn nhân, cách
+                nuôi con, sự học, sự nghiệp? Hãy gióng chuông nữ giới!</h4>
         </header>
 
         <main>
             <form id="query-form" class="form">
-                <input type="text" id="query" name="query" placeholder="Nhập câu hỏi của bạn cho đờn-bà ở đây và gióng chuông!" required style="font-family: 'EB Garamond', serif; font-style: italic;">
+                <input type="text" id="query" name="query"
+                    placeholder="Nhập câu hỏi của bạn cho đờn-bà ở đây và gióng chuông!" required
+                    style="font-family: 'EB Garamond', serif; font-style: italic;">
                 <button type="submit" class="bell-icon">
                     <img src="{{ url_for('static', filename='icon/bell-icon.png') }}" alt="Submit Icon">
                 </button>
             </form>
 
             <div id="confirmation-message" class="hidden">Your question has been submitted!</div>
-        
+
             <div id="response-container" class="response-container hidden">
                 <p id="response">Your response will appear here.</p>
             </div>
@@ -142,4 +148,5 @@
 
     </script> -->
 </body>
+
 </html>
